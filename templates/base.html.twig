@@ -1,0 +1,12 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>{% block title %}My Application{% endblock %}</title>
+    {{ encore_entry_link_tags('app') }} {# CSS files included here #}
+</head>
+<body>
+    {% block body %}{% endblock %}
+    {{ encore_entry_script_tags('app') }} {# JavaScript files included here #}
+</body>
+</html>

@@ -17,6 +17,12 @@ class TodoController extends AbstractController
      * as Symfony can auto-wire the EntityManager and Repository.
      */
 
+    #[Route('/', name: 'home')]
+    public function index()
+    {
+        return $this->render('index.html.twig');
+    } 
+
     #[Route('/todo/create', name: 'todo_create', methods: ['POST'])]
     public function create(Request $request, EntityManagerInterface $entityManager): Response
     {
