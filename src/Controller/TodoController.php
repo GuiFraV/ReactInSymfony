@@ -26,9 +26,12 @@ class TodoController extends AbstractController
     #[Route('/todo/create', name: 'todo_create', methods: ['POST'])]
     public function create(Request $request, EntityManagerInterface $entityManager): Response
     {
+        // Decode JSON request to array
+        $data = json_decode($request->getContent(), true);
+
         $todo = new Todo();
-        $todo->setTitle($request->request->get('title'));
-        $todo->setDescription($request->request->get('description'));
+        $todo->setTitle($data['title'] ?? 'Default Title');
+        $todo->setDescription($data['description'] ?? 'Default Description');
         $todo->setCompleted(false);
         $todo->setCreatedAt(new \DateTime());
 

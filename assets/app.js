@@ -7,9 +7,26 @@ import './styles/app.css';
 
 class App extends React.Component {
 
-     handleAddTodo = (newTodo) => {
-        // Logic to add the new todo (e.g., API call to the backend)
-        console.log(newTodo); // For now, just log it to the console
+    handleAddTodo = async (newTodo) => {
+        try {
+            const response = await fetch('http://localhost:8000/todo/create', { // Update this URL to your Symfony API endpoint
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(newTodo),
+            });
+
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+
+            const result = await response.json();
+            console.log(result); // Or handle the response as needed
+            // Optionally, update your state here to reflect the new todo item
+        } catch (error) {
+            console.error('Error adding todo:', error);
+        }
     };
 
     render() {
