@@ -47,18 +47,23 @@ class TodoController extends AbstractController
     #[Route('/todo/list', name: 'todo_list', methods: ['GET'])]
     public function list(TodoRepository $todoRepository): Response
     {
-        $todos = $todoRepository->findAll();
-        $responseArray = array_map(function ($todo) {
-            return [
-                'id' => $todo->getId(),
-                'title' => $todo->getTitle(),
-                'description' => $todo->getDescription(),
-                'completed' => $todo->getCompleted(),
-                'createdAt' => $todo->getCreatedAt()->format('Y-m-d H:i:s'),
-            ];
-        }, $todos);
-
+        try{
+            $todos = $todoRepository->findAll();
+            $responseArray = array_map(function ($todo) {
+                return [
+                    'id' => $todo->getId(),
+                    'title' => $todo->getTitle(),
+                    'description' => $todo->getDescription(),
+                    'completed' => $todo->isCompleted(),
+                    'createdAt' => $todo->getCreatedAt()->format('Y-m-d H:i:s'),
+                ];
+            }, $todos);
+        } catch (\Exception $e) {
+            error_log($e->getMessage());
+            return $this->json(['error' => $e->getMessage()], Response::HTTP_INTERNAL_SERVER_ERROR);
+        }
         return $this->json($responseArray);
+
     }
 
     #[Route('/todo/update/{id}', name: 'todo_update', methods: ['PUT'])]
@@ -68,14 +73,16 @@ class TodoController extends AbstractController
             return $this->json(['message' => 'Todo not found'], Response::HTTP_NOT_FOUND);
         }
 
-        $todo->setTitle($request->request->get('title', $todo->getTitle()));
-        $todo->setDescription($request->request->get('description', $todo->getDescription()));
-        // Other updates
+        $data = json_decode($request->getContent(), true);
+        $todo->setTitle($data['title']);
+        $todo->setDescription($data['description']);
+        $todo->setCompleted($data['completed'] ?? false);
 
         $entityManager->flush();
 
         return $this->json(['message' => 'Todo updated successfully']);
     }
+
 
     #[Route('/todo/delete/{id}', name: 'todo_delete', methods: ['DELETE'])]
     public function delete(Todo $todo, EntityManagerInterface $entityManager): Response
