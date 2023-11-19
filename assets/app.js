@@ -77,12 +77,12 @@ const App = () => {
             
         });
 
-        fetchTodos();
-
         if (!response.ok) {
             throw new Error(`HTTP error! status: ${response.status}`);
         }
-            this.fetchTodos(); // Refetch the updated todos list
+
+        fetchTodos();
+
         } catch (error) {
             console.error('Error deleting todo:', error);
         }
