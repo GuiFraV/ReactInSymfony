@@ -2,15 +2,20 @@
 import React from 'react';
 import TodoItem from '../TodoItem/TodoItem'; 
 
-const TodoList = ({ todos }) => {
+const TodoList = ({ todos, onUpdateTodo, onDeleteTodo }) => {
     return (
         <div>
-            <h2>Todo List</h2>
             {todos.map(todo => (
-                <TodoItem key={todo.id} title={todo.title} description={todo.description} />
+                <TodoItem 
+                    key={todo.id} 
+                    todo={todo} 
+                    onUpdate={onUpdateTodo} 
+                    onDelete={onDeleteTodo} 
+                />
             ))}
         </div>
     );
 };
+
 
 export default TodoList;

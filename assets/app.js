@@ -29,7 +29,7 @@ const App = () => {
 
     const handleAddTodo = async (newTodo) => {
         try {
-            const response = await fetch('http://localhost:8000/todo/create', { // Update this URL to your Symfony API endpoint
+            const response = await fetch('http://localhost:8000/todo/create', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -42,35 +42,42 @@ const App = () => {
             }
 
             const result = await response.json();
-            console.log(result); // Or handle the response as needed
-            // Optionally, update your state here to reflect the new todo item
+            setTodos(prevTodos => [...prevTodos, { ...newTodo, id: result.todo_id }]);
         } catch (error) {
             console.error('Error adding todo:', error);
         }
     };
 
-    const handleUpdateTodo = async (updatedTodo) => {
-        try {
-        const response = await fetch(`http://localhost:8000/todo/update/${updatedTodo.id}`, {
-            method: 'PUT',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(updatedTodo)
-        });
 
-        if (!response.ok) {
-            throw new Error(`HTTP error! status: ${response.status}`);
-        }
-            this.fetchTodos(); // Refetch the updated todos list
+   const handleUpdateTodo = async (updatedTodo) => {
+        try {
+            const response = await fetch(`http://localhost:8000/todo/update/${updatedTodo.id}`, {
+                method: 'PUT',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(updatedTodo)
+            });
+
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+
+            setTodos(prevTodos => prevTodos.map(todo => 
+                todo.id === updatedTodo.id ? { ...todo, ...updatedTodo } : todo
+            ));
         } catch (error) {
             console.error('Error updating todo:', error);
         }
     };
 
+
     const handleDeleteTodo = async (todoId) => {
         try {
-        const response = await fetch(`http://localhost:8000/todo/delete/${todoId}`, {
+            const response = await fetch(`http://localhost:8000/todo/delete/${todoId}`, {
             method: 'DELETE'
+            
         });
+
+        fetchTodos();
 
         if (!response.ok) {
             throw new Error(`HTTP error! status: ${response.status}`);
