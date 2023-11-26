@@ -8,7 +8,6 @@ This project is a to-do list application that combines a React frontend with a S
 
 - **Frontend**: React
 - **Backend**: Symfony (PHP Framework)
-- **Database**: [Specify Database]
 
 ## Features
 
@@ -18,14 +17,6 @@ This project is a to-do list application that combines a React frontend with a S
 - Delete to-do items.
 
 ## Getting Started
-
-### Prerequisites
-
-- PHP [Specify Version]
-- Composer
-- Node.js and npm
-- Symfony CLI
-- [Any Other Prerequisites]
 
 ### Setting Up the Project
 
